@@ -1,10 +1,13 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from db.session import SessionLocal
 from models.dataset import Dataset
 from schemas.dataset import DatasetOut, DatasetDetail
 from services.stats import compute_stats
+from services.types import infer_column_types
+
+from typing import List, Dict, Any
 
 import pandas as pd
 import numpy as np
@@ -29,32 +32,27 @@ async def upload_csv(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Gagal membaca file CSV: {e}")
 
-    numeric_df = df.select_dtypes(include="number")
+    # detesi tipe kolom
+    numeric_cols, categorical_cols = infer_column_types(df)
+
+    # statistik untuk kolom numerik
     stats = compute_stats(df, bins="sturges")
-
-    # stats = {}
-    # for col in numeric_df.columns.tolist():
-    #     series = numeric_df[col].dropna()
-    #     stats[col] = {
-    #         "mean": float(series.mean()) if not series.empty else None,
-    #         "median": float(series.median()) if not series.empty else None,
-    #         "std": float(series.std(ddof=1)) if not series.empty else None,
-    #         "min": float(series.min()) if not series.empty else None,
-    #         "max": float(series.max()) if not series.empty else None,
-    #     }
-
-    # stats = {col_stats(numeric_df[col] for col in numeric_df.columns.tolist())}
     
     # Preview 5 baris pertama
     preview_rows = df.head(5).to_dict(orient="records")
+
+    # Simpan raw data dalam bentuk JSON
+    raw_data = df.to_dict(orient="records")
 
     dataset = Dataset(
         filename=file.filename,
         n_rows=int(df.shape[0]),
         n_cols=int(df.shape[1]),
-        numeric_columns=numeric_df.columns.tolist(),
+        numeric_columns=numeric_cols,
+        categorical_columns=categorical_cols,
         stats=stats,
-        preview_rows=preview_rows
+        preview_rows=preview_rows,
+        raw_data=raw_data
     )
 
     db: Session = next(get_db())
@@ -78,3 +76,45 @@ def get_dataset_detail(dataset_id: int):
         raise HTTPException(status_code=404, detail="Dataset tidak ditemukan")
     return item
 
+@router.get("/{dataset_id}/groupby")
+def groupby(
+    dataset_id: int,
+    by: List[str] = Query(..., description="Kolom kategorik untuk group by"),
+    limit: int = Query(100, ge=1, le=10000),
+    sort: str = Query("count:desc", description="count:asc|count:desc")
+):
+    db: Session = next(get_db())
+    ds: Dataset | None = db.query(Dataset).filter(Dataset.id == dataset_id).first()
+    if not ds:
+        raise HTTPException(status_code=404, detail="Dataset tidak ditemukan")
+    if not ds.raw_data:
+        raise HTTPException(status_code=400, detail="Dataset tidak memiliki data mentah")
+    
+    # validasi kolom
+    cat_cols = set(ds.categorical_columns or [])
+    for col in by:
+        if col not in cat_cols:
+            raise HTTPException(status_code=400, detail=f"Kolom '{col}' bukan kolom kategorik")
+    
+    df = pd.DataFrame(ds.raw_data)
+    for col in by:
+        if col not in df.columns:
+            raise HTTPException(status_code=400, detail=f"Kolom '{col}' tidak ditemukan")
+        
+    grp_by = df.groupby(by, dropna=False).size().reset_index(name="count")
+
+    # sorting
+    direction = "desc" if sort.lower().endswith(":desc") else "asc"
+    grp_by = grp_by.sort_values("count", ascending=(direction == "asc"))
+
+    # limit
+    grp_by = grp_by.head(limit)
+
+    # Response records
+    records: List[Dict[str, Any]] = grp_by.to_dict(orient="records")
+
+    return {
+        "by": by,
+        "rows": records,
+        "total_groups": int(len(grp_by))
+    }

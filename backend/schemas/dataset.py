@@ -7,6 +7,7 @@ class DatasetOut(BaseModel):
     n_rows: int
     n_cols: int
     numeric_columns: Optional[List[str]] = None
+    categorical_columns: Optional[List[str]] = None
     stats: Optional[Dict[str, Any]] = None
 
     class Config:
