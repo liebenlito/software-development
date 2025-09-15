@@ -10,6 +10,8 @@ export default function App() {
       <UploadCSV />
       <hr style={{margin: '24px 0'}} />
       <DatasetList />
+      <hr style={{margin: '24px 0'}} />
+      
     </div>
   )
 }

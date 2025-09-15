@@ -62,11 +62,13 @@ async def upload_csv(file: UploadFile = File(...)):
 
     return dataset
 
+
 @router.get("", response_model=list[DatasetOut])
 def list_datasets():
     db: Session = next(get_db())
     items = db.query(Dataset).order_by(Dataset.id.desc()).all()
     return items
+
 
 @router.get("/{dataset_id}", response_model=DatasetDetail)
 def get_dataset_detail(dataset_id: int):
@@ -75,6 +77,7 @@ def get_dataset_detail(dataset_id: int):
     if not item:
         raise HTTPException(status_code=404, detail="Dataset tidak ditemukan")
     return item
+
 
 @router.get("/{dataset_id}/groupby")
 def groupby(
