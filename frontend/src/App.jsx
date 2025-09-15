@@ -1,6 +1,8 @@
 import React from 'react'
 import UploadCSV from './components/UploadCSV'
 import DatasetList from './components/DatasetList'
+import GroupByExplorer from './components/GroupByExplorer'
+
 
 export default function App() {
   return (
@@ -11,7 +13,7 @@ export default function App() {
       <hr style={{margin: '24px 0'}} />
       <DatasetList />
       <hr style={{margin: '24px 0'}} />
-      
+      <GroupByExplorer />
     </div>
   )
 }
