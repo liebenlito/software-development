@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="id" class="h-full antialiased">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Admin Dashboard — Tailwind</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            container: { center: true, padding: '1rem' },
+            fontFamily: { sans: ["Inter", "ui-sans-serif", "system-ui"] },
+          },
+        },
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="h-full bg-gray-50 text-gray-800 dark:bg-neutral-950 dark:text-neutral-200">
+    <div class="min-h-screen">
+      <!-- Topbar -->
+      <header class="sticky top-0 z-40 border-b border-gray-200 bg-white/80 backdrop-blur dark:border-neutral-800 dark:bg-neutral-900/70">
+        <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3">
+          <div class="flex items-center gap-3">
+            <button id="btnSidebar" class="-ml-2 inline-flex items-center rounded-lg p-2 hover:bg-gray-100 focus:outline-none focus:ring dark:hover:bg-neutral-800 md:hidden" aria-label="Toggle sidebar">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M3.75 5.25h16.5m-16.5 6h16.5m-16.5 6h16.5"/></svg>
+            </button>
+            <a href="#" class="flex items-center gap-2 font-semibold tracking-tight">
+              <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-gray-900 text-white dark:bg-white dark:text-black">TW</span>
+              <span>Admin</span>
+            </a>
+            <nav class="hidden items-center gap-2 text-sm text-gray-400 md:flex">
+              <span>›</span>
+              <a class="hover:underline" href="#">Dashboard</a>
+              <span>›</span>
+              <span class="text-gray-600 dark:text-neutral-300">Overview</span>
+            </nav>
+          </div>
+          <div class="flex items-center gap-2 md:gap-4">
+            <div class="relative hidden md:block">
+              <input type="search" placeholder="Cari proyek, pengguna, dll…" class="w-72 rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-400 focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:ring-white/10" />
+              <span class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-400">⌘K</span>
+            </div>
+            <button id="btnTheme" class="hidden rounded-xl border border-gray-200 px-3 py-2 text-sm hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-800 md:block">Mode Gelap</button>
+            <button id="btnNotif" class="rounded-xl p-2 hover:bg-gray-100 dark:hover:bg-neutral-800" aria-label="Notifications">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.25 18.75a2.25 2.25 0 0 1-4.5 0"/><path d="M4.5 9.75a7.5 7.5 0 1 1 15 0v4.318l1.06 2.121A1.5 1.5 0 0 1 19.215 18H4.785a1.5 1.5 0 0 1-1.395-1.811L4.5 14.068V9.75z"/></svg>
+            </button>
+            <button id="btnUser" class="flex items-center gap-2 rounded-xl p-1 hover:bg-gray-100 dark:hover:bg-neutral-800">
+              <img alt="avatar" src="https://i.pravatar.cc/40" class="h-8 w-8 rounded-full ring-2 ring-white dark:ring-neutral-900" />
+              <span class="hidden text-sm md:block">Nita</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Layout -->
+      <div class="mx-auto grid max-w-7xl grid-cols-1 md:grid-cols-[260px,1fr]">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-30 hidden w-64 -translate-x-full border-r border-gray-200 bg-white p-4 transition-transform md:static md:translate-x-0 md:border-r md:p-6 dark:border-neutral-800 dark:bg-neutral-900">
+          <div class="mb-4">
+            <label class="mb-2 block text-xs font-semibold uppercase tracking-wider text-gray-400">Quick Switch</label>
+            <select class="w-full rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900">
+              <option>Workspace Utama</option>
+              <option>Riset Halal</option>
+              <option>SNA TF Indonesia</option>
+            </select>
+          </div>
+          <nav class="flex h-[calc(100%-5rem)] flex-col gap-6">
+            <div>
+              <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">Menu</p>
+              <ul class="space-y-1 text-sm">
+                <li><a class="group flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800" href="#"><span class="i">🏠</span><span>Dashboard</span></a></li>
+                <li><a class="group flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800" href="#users"><span>👥</span><span>Pengguna</span></a></li>
+                <li><a class="group flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800" href="#orders"><span>🧾</span><span>Transaksi</span></a></li>
+                <li><a class="group flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800" href="#reports"><span>📈</span><span>Laporan</span></a></li>
+                <li><a class="group flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-gray-100 dark:hover:bg-neutral-800" href="#settings"><span>⚙️</span><span>Pengaturan</span></a></li>
+              </ul>
+            </div>
+            <div class="mt-auto space-y-2">
+              <a href="#" class="block rounded-lg border border-gray-200 p-3 text-sm hover:bg-gray-50 dark:border-neutral-700 dark:hover:bg-neutral-800">Pusat Bantuan</a>
+              <a href="#" class="block rounded-lg bg-gray-900 p-3 text-center text-sm text-white hover:bg-black dark:bg-white dark:text-black">Buat Laporan</a>
+            </div>
+          </nav>
+        </aside>
+
+        <!-- Main -->
+        <main class="px-4 pb-16 pt-6 md:px-8 md:pt-8">
+          <!-- Heading + Tabs -->
+          <section class="mb-6">
+            <div class="flex flex-col justify-between gap-3 md:flex-row md:items-end">
+              <div>
+                <h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Ringkasan</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-neutral-400">Pantau performa harian, pengguna baru, dan aktivitas transaksi.</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button class="rounded-xl border border-gray-200 px-3 py-2 text-sm hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-800">Ekspor CSV</button>
+                <button id="btnAdd" class="rounded-xl bg-gray-900 px-3 py-2 text-sm text-white hover:bg-black dark:bg-white dark:text-black">Tambah</button>
+              </div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+              <button data-tab="overview" class="tab-btn rounded-xl bg-gray-900 px-3 py-1.5 text-white dark:bg-white dark:text-black">Overview</button>
+              <button data-tab="traffic" class="tab-btn rounded-xl px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-neutral-800">Traffic</button>
+              <button data-tab="finance" class="tab-btn rounded-xl px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-neutral-800">Keuangan</button>
+              <button data-tab="system" class="tab-btn rounded-xl px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-neutral-800">Sistem</button>
+            </div>
+          </section>
+
+          <!-- KPI Cards -->
+          <section class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+              <p class="text-xs uppercase tracking-wider text-gray-400">Pengguna Baru</p>
+              <div class="mt-2 flex items-baseline justify-between">
+                <h2 class="text-2xl font-semibold">+872</h2>
+                <span class="text-xs text-green-600 dark:text-green-400">+6.1%</span>
+              </div>
+              <svg viewBox="0 0 100 24" class="mt-3 h-8 w-full"><polyline fill="none" stroke="currentColor" stroke-width="2" points="0,18 10,16 20,17 30,12 40,10 50,8 60,12 70,9 80,7 90,5 100,6" class="opacity-60"/></svg>
+            </article>
+            <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+              <p class="text-xs uppercase tracking-wider text-gray-400">Transaksi</p>
+              <div class="mt-2 flex items-baseline justify-between">
+                <h2 class="text-2xl font-semibold">3,241</h2>
+                <span class="text-xs text-red-600 dark:text-red-400">-1.1%</span>
+              </div>
+              <svg viewBox="0 0 100 24" class="mt-3 h-8 w-full"><polyline fill="none" stroke="currentColor" stroke-width="2" points="0,5 10,6 20,7 30,9 40,12 50,10 60,12 70,14 80,16 90,18 100,19" class="opacity-60"/></svg>
+            </article>
+            <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+              <p class="text-xs uppercase tracking-wider text-gray-400">Kunjungan</p>
+              <div class="mt-2 flex items-baseline justify-between">
+                <h2 class="text-2xl font-semibold">86.1K</h2>
+                <span class="text-xs text-green-600 dark:text-green-400">+8.0%</span>
+              </div>
+              <svg viewBox="0 0 100 24" class="mt-3 h-8 w-full"><polyline fill="none" stroke="currentColor" stroke-width="2" points="0,18 10,13 20,14 30,9 40,12 50,11 60,8 70,10 80,7 90,6 100,4" class="opacity-60"/></svg>
+            </article>
+            <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+              <p class="text-xs uppercase tracking-wider text-gray-400">CSAT</p>
+              <div class="mt-2 flex items-baseline justify-between">
+                <h2 class="text-2xl font-semibold">92%</h2>
+                <span class="text-xs text-green-600 dark:text-green-400">+0.6%</span>
+              </div>
+              <svg viewBox="0 0 100 24" class="mt-3 h-8 w-full"><polyline fill="none" stroke="currentColor" stroke-width="2" points="0,7 10,7 20,8 30,8 40,9 50,9 60,10 70,10 80,10 90,11 100,12" class="opacity-60"/></svg>
+            </article>
+          </section>
+
+          <!-- Filters -->
+          <section class="mb-6 rounded-2xl border border-gray-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
+            <div class="flex flex-wrap items-center gap-3">
+              <select class="rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900">
+                <option>Semua Status</option>
+                <option>Aktif</option>
+                <option>Pending</option>
+                <option>Nonaktif</option>
+              </select>
+              <select class="rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900">
+                <option>Semua Kategori</option>
+                <option>Umum</option>
+                <option>Pro</option>
+              </select>
+              <input type="date" class="rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900" />
+              <div class="ms-auto flex items-center gap-2">
+                <button class="rounded-xl border border-gray-200 px-3 py-2 text-sm hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-800">Reset</button>
+                <button class="rounded-xl bg-gray-900 px-3 py-2 text-sm text-white hover:bg-black dark:bg-white dark:text-black">Terapkan</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Data Table with bulk actions -->
+          <section id="tabel" class="mb-10">
+            <div class="mb-3 flex items-center justify-between">
+              <h3 class="text-lg font-semibold">Daftar Item</h3>
+              <div class="flex items-center gap-2 text-sm">
+                <button id="btnBulk" class="hidden rounded-xl border border-gray-200 px-3 py-2 hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-800">Aksi Massal</button>
+                <div class="relative">
+                  <input type="text" placeholder="Cari…" class="w-52 rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:ring-white/10" />
+                </div>
+              </div>
+            </div>
+
+            <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
+              <table class="min-w-full text-sm">
+                <thead class="sticky top-[56px] z-10 bg-gray-50/90 backdrop-blur dark:bg-neutral-900/80">
+                  <tr class="divide-x divide-gray-200 dark:divide-neutral-800">
+                    <th class="w-10 px-3 py-3 text-left"><input id="checkAll" type="checkbox" class="h-4 w-4 rounded" /></th>
+                    <th class="px-3 py-3 text-left font-medium text-gray-500">Nama</th>
+                    <th class="px-3 py-3 text-left font-medium text-gray-500">Kategori</th>
+                    <th class="px-3 py-3 text-left font-medium text-gray-500">Status</th>
+                    <th class="px-3 py-3 text-left font-medium text-gray-500">Diperbarui</th>
+                    <th class="px-3 py-3 text-right font-medium text-gray-500">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody" class="divide-y divide-gray-200 dark:divide-neutral-800">
+                  <!-- Rows injected by JS below -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="mt-3 flex items-center justify-between text-sm">
+              <p id="pageInfo" class="text-gray-500"></p>
+              <div class="flex items-center gap-2">
+                <button id="prevPage" class="rounded-xl border border-gray-200 px-3 py-1.5 hover:bg-gray-100 disabled:opacity-40 dark:border-neutral-700 dark:hover:bg-neutral-800">Sebelumnya</button>
+                <button id="nextPage" class="rounded-xl border border-gray-200 px-3 py-1.5 hover:bg-gray-100 disabled:opacity-40 dark:border-neutral-700 dark:hover:bg-neutral-800">Berikutnya</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Footer -->
+          <footer class="mt-12 border-t border-gray-200 py-8 text-sm text-gray-500 dark:border-neutral-800">
+            <p>&copy; <span id="year"></span> Admin Dashboard. Dibuat dengan TailwindCSS.</p>
+          </footer>
+        </main>
+      </div>
+    </div>
+
+    <!-- Slide-over Drawer (Detail) -->
+    <div id="drawer" class="fixed inset-0 z-50 hidden">
+      <div class="absolute inset-0 bg-black/40" data-close="drawer"></div>
+      <div class="absolute right-0 top-0 h-full w-full max-w-md translate-x-full bg-white p-6 shadow-xl transition-transform dark:bg-neutral-900" id="drawerPanel">
+        <div class="mb-4 flex items-start justify-between">
+          <div>
+            <h4 class="text-lg font-semibold" id="drawerTitle">Detail Item</h4>
+            <p class="text-sm text-gray-500 dark:text-neutral-400" id="drawerSubtitle">Informasi ringkas</p>
+          </div>
+          <button class="rounded-xl p-2 hover:bg-gray-100 dark:hover:bg-neutral-800" data-close="drawer">✕</button>
+        </div>
+        <div id="drawerBody" class="space-y-4 text-sm">
+          <!-- Inject content via JS -->
+        </div>
+        <div class="mt-6 flex justify-end gap-2">
+          <button class="rounded-xl border border-gray-200 px-3 py-2 hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-800" data-close="drawer">Tutup</button>
+          <button class="rounded-xl bg-gray-900 px-3 py-2 text-white hover:bg-black dark:bg-white dark:text-black">Simpan</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 z-50 hidden">
+      <div class="absolute inset-0 bg-black/40" data-close="modal"></div>
+      <div class="absolute left-1/2 top-1/2 w-[90%] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-gray-200 bg-white p-6 shadow-xl dark:border-neutral-800 dark:bg-neutral-900">
+        <h4 class="text-lg font-semibold">Tambah Data</h4>
+        <p class="mt-1 text-sm text-gray-500 dark:text-neutral-400">Form singkat untuk menambahkan data baru.</p>
+        <form class="mt-4 space-y-3">
+          <input placeholder="Nama" class="w-full rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900" />
+          <input placeholder="Kategori" class="w-full rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900" />
+          <select class="w-full rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-900"><option>Aktif</option><option>Pending</option><option>Nonaktif</option></select>
+        </form>
+        <div class="mt-5 flex justify-end gap-2">
+          <button class="rounded-xl border border-gray-200 px-3 py-2 hover:bg-gray-100 dark:border-neutral-700 dark:hover:bg-neutral-800" data-close="modal">Batal</button>
+          <button class="rounded-xl bg-gray-900 px-3 py-2 text-white hover:bg-black dark:bg-white dark:text-black">Simpan</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="pointer-events-none fixed bottom-6 right-6 z-50 hidden">
+      <div class="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm shadow-lg dark:border-neutral-800 dark:bg-neutral-900">Data tersimpan ✅</div>
+    </div>
+
+    <script>
+      const html = document.documentElement;
+      const sidebar = document.getElementById('sidebar');
+      const btnSidebar = document.getElementById('btnSidebar');
+      const btnTheme = document.getElementById('btnTheme');
+      const year = document.getElementById('year');
+      const btnAdd = document.getElementById('btnAdd');
+      const modal = document.getElementById('modal');
+      const drawer = document.getElementById('drawer');
+      const drawerPanel = document.getElementById('drawerPanel');
+      const toast = document.getElementById('toast');
+      const checkAll = document.getElementById('checkAll');
+      const tbody = document.getElementById('tbody');
+      const btnBulk = document.getElementById('btnBulk');
+      const pageInfo = document.getElementById('pageInfo');
+      const prevPage = document.getElementById('prevPage');
+      const nextPage = document.getElementById('nextPage');
+
+      year.textContent = new Date().getFullYear();
+
+      // Sidebar toggle
+      btnSidebar?.addEventListener('click', () => {
+        const hidden = sidebar.classList.contains('hidden');
+        sidebar.classList.toggle('hidden', !hidden);
+        sidebar.classList.toggle('-translate-x-full', false);
+      });
+
+      // Theme toggle
+      btnTheme?.addEventListener('click', () => html.classList.toggle('dark'));
+
+      // Modal open/close
+      btnAdd?.addEventListener('click', () => modal.classList.remove('hidden'));
+      document.addEventListener('click', (e) => {
+        const closeTarget = e.target.closest('[data-close]');
+        if (closeTarget?.dataset.close === 'modal') modal.classList.add('hidden');
+        if (closeTarget?.dataset.close === 'drawer') drawer.classList.add('hidden');
+      });
+
+      // Drawer helpers
+      function openDrawer({ title, subtitle, body }) {
+        document.getElementById('drawerTitle').textContent = title || 'Detail';
+        document.getElementById('drawerSubtitle').textContent = subtitle || '';
+        document.getElementById('drawerBody').innerHTML = body || '';
+        drawer.classList.remove('hidden');
+        drawerPanel.classList.remove('translate-x-full');
+        drawerPanel.classList.add('translate-x-0');
+      }
+
+      // Toast helpers
+      function showToast(msg='Tersimpan') {
+        toast.firstElementChild.textContent = msg;
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 2000);
+      }
+
+      // Table data (dummy)
+      const data = Array.from({ length: 87 }).map((_, i) => ({
+        id: i + 1,
+        name: `Contoh ${String.fromCharCode(65 + (i % 26))}-${i+1}`,
+        category: ['Umum','Pro'][i % 2],
+        status: ['Aktif','Pending','Nonaktif'][i % 3],
+        updated: new Date(Date.now() - i*86400000).toISOString().split('T')[0],
+      }));
+
+      // Pagination state
+      let page = 1;
+      const pageSize = 8;
+
+      function renderTable() {
+        const start = (page - 1) * pageSize;
+        const rows = data.slice(start, start + pageSize);
+        tbody.innerHTML = rows.map((r) => `
+          <tr class="hover:bg-gray-50 dark:hover:bg-neutral-800/60">
+            <td class="px-3 py-3"><input type="checkbox" class="rowCheck h-4 w-4 rounded" data-id="${r.id}" /></td>
+            <td class="px-3 py-3"><button class="underline-offset-2 hover:underline" data-open-drawer="${r.id}">${r.name}</button></td>
+            <td class="px-3 py-3">${r.category}</td>
+            <td class="px-3 py-3">${badge(r.status)}</td>
+            <td class="px-3 py-3">${r.updated}</td>
+            <td class="px-3 py-3 text-right">
+              <button class="rounded-lg px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-neutral-800" data-edit="${r.id}">Edit</button>
+              <button class="rounded-lg px-2 py-1 text-xs text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20" data-delete="${r.id}">Hapus</button>
+            </td>
+          </tr>
+        `).join('');
+        const totalPages = Math.ceil(data.length / pageSize);
+        pageInfo.textContent = `Hal ${page} dari ${totalPages} • ${data.length} item`;
+        prevPage.disabled = page === 1;
+        nextPage.disabled = page === totalPages;
+        updateBulkVisibility();
+      }
+
+      function badge(status) {
+        const map = {
+          'Aktif': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+          'Pending': 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300',
+          'Nonaktif': 'bg-gray-200 text-gray-700 dark:bg-neutral-700 dark:text-neutral-100',
+        };
+        return `<span class="inline-flex rounded-full px-2 py-0.5 text-xs ${map[status]}">${status}</span>`;
+      }
+
+      // Pagination events
+      prevPage.addEventListener('click', () => { page--; renderTable(); });
+      nextPage.addEventListener('click', () => { page++; renderTable(); });
+
+      // Bulk selection
+      checkAll?.addEventListener('change', (e) => {
+        document.querySelectorAll('.rowCheck').forEach(c => c.checked = e.target.checked);
+        updateBulkVisibility();
+      });
+      document.addEventListener('change', (e) => {
+        if (e.target.classList?.contains('rowCheck')) updateBulkVisibility();
+      });
+      function updateBulkVisibility() {
+        const anyChecked = !!document.querySelector('.rowCheck:checked');
+        btnBulk.classList.toggle('hidden', !anyChecked);
+      }
+
+      // Row actions
+      document.addEventListener('click', (e) => {
+        const edit = e.target.closest('[data-edit]');
+        const del = e.target.closest('[data-delete]');
+        const open = e.target.closest('[data-open-drawer]');
+        if (edit) { showToast('Mode edit belum diimplementasi'); }
+        if (del) { showToast('Item dihapus (dummy)'); }
+        if (open) {
+          const id = +open.dataset.openDrawer;
+          const row = data.find(d => d.id === id);
+          openDrawer({
+            title: row.name,
+            subtitle: `Status: ${row.status}`,
+            body: `<div class='space-y-2'>
+              <div><span class='text-gray-500 dark:text-neutral-400'>Kategori:</span> ${row.category}</div>
+              <div><span class='text-gray-500 dark:text-neutral-400'>Terakhir diperbarui:</span> ${row.updated}</div>
+              <div class='rounded-xl border border-gray-200 p-3 dark:border-neutral-800'>
+                <p class='text-sm font-medium mb-2'>Catatan</p>
+                <p class='text-sm'>Ini adalah panel detail contoh. Integrasikan dengan API Anda untuk data sebenarnya.</p>
+              </div>
+            </div>`
+          });
+        }
+      });
+
+      // Close on ESC
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') { modal.classList.add('hidden'); drawer.classList.add('hidden'); }
+      });
+
+      // Render first paint
+      renderTable();
+
+      // Tabs (demo only)
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('bg-gray-900','text-white','dark:bg-white','dark:text-black'));
+          btn.classList.add('bg-gray-900','text-white','dark:bg-white','dark:text-black');
+          showToast(`Tab: ${btn.dataset.tab}`);
+        })
+      });
+
+      // Close sidebar when clicking outside (mobile)
+      document.addEventListener('click', (e) => {
+        if (!sidebar) return;
+        const clickedInside = sidebar.contains(e.target) || btnSidebar?.contains(e.target);
+        if (!clickedInside && window.innerWidth < 768) sidebar.classList.add('hidden');
+      });
+    </script>
+  </body>
+</html>

@@ -4,7 +4,7 @@ CREATE TABLE public.datasets (
 	n_rows int4 NOT NULL,
 	n_cols int4 NOT NULL,
 	numeric_columns jsonb NULL,
-	stats json NULL,
+	stats jsonb NULL,
 	created_at timestamptz DEFAULT now() NULL,
 	categorical_columns jsonb NULL,
 	stored_csv text NULL,

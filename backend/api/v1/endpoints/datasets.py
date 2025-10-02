@@ -32,6 +32,9 @@ async def upload_csv(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Gagal membaca file CSV: {e}")
 
+    # convert NaN->None
+    df = df.replace({np.nan: None})
+
     # detesi tipe kolom
     numeric_cols, categorical_cols = infer_column_types(df)
 
